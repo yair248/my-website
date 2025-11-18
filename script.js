@@ -6,7 +6,8 @@ const categories = {
     'games': 'משחקים',
     'home': 'לבית',
     'electronics': 'אלקטרוניקה',
-    'fashion': 'אופנה'
+    'fashion': 'אופנה',
+    'kitchen': 'מטבח'
 };
 
 // טעינת קישורים מ-localStorage
@@ -87,7 +88,8 @@ function getDefaultImage(category) {
         'games': 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400',
         'home': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400',
         'electronics': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400',
-        'fashion': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400'
+        'fashion': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400',
+        'kitchen': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400'
     };
     return defaultImages[category] || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
 }
