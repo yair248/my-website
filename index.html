@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שיתוף קישורי קניות - Shopping Links</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🛒 שיתוף קישורי קניות</h1>
+            </div>
+            <nav class="nav">
+                <button class="btn-add" id="addLinkBtn">+ הוסף קישור</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="categories-tabs">
+                <button class="tab-btn active" data-category="all">הכל</button>
+                <button class="tab-btn" data-category="kids-clothes">👶 בגדי ילדים</button>
+                <button class="tab-btn" data-category="photography">📷 אביזרי צילום</button>
+                <button class="tab-btn" data-category="games">🎮 משחקים</button>
+                <button class="tab-btn" data-category="home">🏠 לבית</button>
+                <button class="tab-btn" data-category="electronics">📱 אלקטרוניקה</button>
+                <button class="tab-btn" data-category="fashion">👔 אופנה</button>
+            </div>
+
+            <div class="links-grid" id="linksGrid">
+                <!-- קישורים יופיעו כאן -->
+            </div>
+        </div>
+    </main>
+
+    <!-- מודל להוספת קישור -->
+    <div class="modal" id="addLinkModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>הוסף קישור חדש</h2>
+            <form id="addLinkForm">
+                <div class="form-group">
+                    <label for="linkTitle">כותרת:</label>
+                    <input type="text" id="linkTitle" required placeholder="לדוגמה: חולצה אדומה לילדים">
+                </div>
+                <div class="form-group">
+                    <label for="linkUrl">קישור:</label>
+                    <input type="url" id="linkUrl" required placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label for="linkCategory">קטגוריה:</label>
+                    <select id="linkCategory" required>
+                        <option value="">בחר קטגוריה</option>
+                        <option value="kids-clothes">בגדי ילדים</option>
+                        <option value="photography">אביזרי צילום</option>
+                        <option value="games">משחקים</option>
+                        <option value="home">לבית</option>
+                        <option value="electronics">אלקטרוניקה</option>
+                        <option value="fashion">אופנה</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="linkImage">תמונה (אופציונלי):</label>
+                    <input type="url" id="linkImage" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label for="linkPrice">מחיר (אופציונלי):</label>
+                    <input type="text" id="linkPrice" placeholder="₪99.90">
+                </div>
+                <button type="submit" class="btn-submit">הוסף קישור</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
