@@ -30,13 +30,35 @@ body {
 
 .header .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .logo h1 {
     font-size: 24px;
     font-weight: 700;
+    text-align: center;
+}
+
+.like-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.like-icon svg {
+    display: block;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .btn-add {
@@ -50,10 +72,14 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .btn-add:hover {
-    transform: translateY(-2px);
+    transform: translateY(calc(-50% - 2px));
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
