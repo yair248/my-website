@@ -246,6 +246,15 @@ if (links.length === 0) {
         },
         {
             id: 2,
+            title: 'מכנסיים קצרים לילדים - 2 יחידות',
+            url: 'https://example.com/kids-shorts',
+            category: 'kids-clothes',
+            image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400',
+            price: '₪79.90',
+            date: new Date().toLocaleDateString('he-IL')
+        },
+        {
+            id: 3,
             title: 'עדשת מצלמה 50mm',
             url: 'https://example.com/camera-lens',
             category: 'photography',
@@ -254,7 +263,7 @@ if (links.length === 0) {
             date: new Date().toLocaleDateString('he-IL')
         },
         {
-            id: 3,
+            id: 4,
             title: 'PlayStation 5 - קונסולת משחקים',
             url: 'https://example.com/ps5',
             category: 'games',
@@ -263,7 +272,7 @@ if (links.length === 0) {
             date: new Date().toLocaleDateString('he-IL')
         },
         {
-            id: 4,
+            id: 5,
             title: 'כרית אורתופדית לבית',
             url: 'https://example.com/pillow',
             category: 'home',
@@ -272,7 +281,7 @@ if (links.length === 0) {
             date: new Date().toLocaleDateString('he-IL')
         },
         {
-            id: 5,
+            id: 6,
             title: 'סט כלי בית למטבח',
             url: 'https://example.com/houseware-set',
             category: 'houseware',
