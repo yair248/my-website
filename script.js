@@ -8,7 +8,8 @@ const categories = {
     'houseware': 'כלי בית',
     'electronics': 'אלקטרוניקה',
     'fashion': 'אופנה',
-    'kitchen': 'מטבח'
+    'kitchen': 'מטבח',
+    'tools': 'כלי עבודה'
 };
 
 // טעינת קישורים מ-localStorage
@@ -178,7 +179,8 @@ function getDefaultImage(category) {
         'electronics': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400',
         'fashion': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400',
         'kitchen': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400',
-        'houseware': 'https://images.unsplash.com/photo-1515105911711-23c0f512fdcc?w=400'
+        'houseware': 'https://images.unsplash.com/photo-1515105911711-23c0f512fdcc?w=400',
+        'tools': 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400'
     };
     return defaultImages[category] || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
 }
