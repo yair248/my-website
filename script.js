@@ -5,6 +5,7 @@ const categories = {
     'photography': 'אביזרי צילום',
     'games': 'משחקים',
     'home': 'לבית',
+    'houseware': 'כלי בית',
     'electronics': 'אלקטרוניקה',
     'fashion': 'אופנה',
     'kitchen': 'מטבח'
@@ -20,11 +21,19 @@ const addLinkModal = document.getElementById('addLinkModal');
 const closeModal = document.getElementById('closeModal');
 const addLinkForm = document.getElementById('addLinkForm');
 const tabButtons = document.querySelectorAll('.tab-btn');
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const importFile = document.getElementById('importFile');
+const quickAddBtn = document.getElementById('quickAddBtn');
+const quickAddModal = document.getElementById('quickAddModal');
+const closeQuickModal = document.getElementById('closeQuickModal');
+const quickAddForm = document.getElementById('quickAddForm');
 
 let currentCategory = 'all';
 
 // אתחול
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadLinksFromFile();
     renderLinks();
     setupEventListeners();
 });
@@ -48,6 +57,23 @@ function setupEventListeners() {
     });
 
     addLinkForm.addEventListener('submit', handleAddLink);
+    quickAddForm.addEventListener('submit', handleQuickAdd);
+
+    quickAddBtn.addEventListener('click', () => {
+        quickAddModal.style.display = 'block';
+    });
+
+    closeQuickModal.addEventListener('click', () => {
+        quickAddModal.style.display = 'none';
+        quickAddForm.reset();
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === quickAddModal) {
+            quickAddModal.style.display = 'none';
+            quickAddForm.reset();
+        }
+    });
 
     tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -57,6 +83,10 @@ function setupEventListeners() {
             renderLinks();
         });
     });
+
+    exportBtn.addEventListener('click', exportLinks);
+    importBtn.addEventListener('click', () => importFile.click());
+    importFile.addEventListener('change', handleImportFile);
 }
 
 // טיפול בהוספת קישור
@@ -80,6 +110,64 @@ function handleAddLink(e) {
     addLinkForm.reset();
 }
 
+// טיפול בהוספה מהירה של מספר קישורים
+function handleQuickAdd(e) {
+    e.preventDefault();
+
+    const urlsText = document.getElementById('quickUrls').value.trim();
+    const category = document.getElementById('quickCategory').value;
+
+    if (!urlsText || !category) {
+        alert('אנא מלא קישורים וקטגוריה');
+        return;
+    }
+
+    // פיצול הקישורים לפי שורות
+    const urlLines = urlsText.split('\n').filter(line => line.trim() !== '');
+    const newLinks = [];
+
+    urlLines.forEach((url, index) => {
+        const cleanUrl = url.trim();
+        if (cleanUrl && (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://'))) {
+            // ניסיון לחלץ כותרת מה-URL
+            let title = cleanUrl;
+            try {
+                const urlObj = new URL(cleanUrl);
+                title = urlObj.hostname.replace('www.', '') + urlObj.pathname;
+                // הסרת סלאשים וסימנים מיוחדים
+                title = title.replace(/\//g, ' ').replace(/[-_]/g, ' ').trim();
+                if (title.length > 50) title = title.substring(0, 50) + '...';
+            } catch (e) {
+                // אם יש שגיאה, נשתמש ב-URL ככותרת
+            }
+
+            newLinks.push({
+                id: Date.now() + index,
+                title: title || `קישור ${index + 1}`,
+                url: cleanUrl,
+                category: category,
+                image: getDefaultImage(category),
+                price: '',
+                date: new Date().toLocaleDateString('he-IL')
+            });
+        }
+    });
+
+    if (newLinks.length === 0) {
+        alert('לא נמצאו קישורים תקינים. ודא שהקישורים מתחילים ב-http:// או https://');
+        return;
+    }
+
+    // הוספת הקישורים לתחילת הרשימה
+    links.unshift(...newLinks);
+    saveLinks();
+    renderLinks();
+    quickAddModal.style.display = 'none';
+    quickAddForm.reset();
+    
+    alert(`נוספו ${newLinks.length} קישורים בהצלחה!`);
+}
+
 // קבלת תמונה ברירת מחדל לפי קטגוריה
 function getDefaultImage(category) {
     const defaultImages = {
@@ -89,7 +177,8 @@ function getDefaultImage(category) {
         'home': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400',
         'electronics': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400',
         'fashion': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400',
-        'kitchen': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400'
+        'kitchen': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400',
+        'houseware': 'https://images.unsplash.com/photo-1515105911711-23c0f512fdcc?w=400'
     };
     return defaultImages[category] || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
 }
@@ -179,9 +268,81 @@ if (links.length === 0) {
             image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400',
             price: '₪129',
             date: new Date().toLocaleDateString('he-IL')
+        },
+        {
+            id: 5,
+            title: 'סט כלי בית למטבח',
+            url: 'https://example.com/houseware-set',
+            category: 'houseware',
+            image: 'https://images.unsplash.com/photo-1515105911711-23c0f512fdcc?w=400',
+            price: '₪249',
+            date: new Date().toLocaleDateString('he-IL')
         }
     ];
     saveLinks();
+}
+
+// ייצוא קישורים לקובץ JSON
+function exportLinks() {
+    const dataStr = JSON.stringify(links, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'shopping-links.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    alert('הקישורים יוצאו בהצלחה! שמור את הקובץ בפרויקט שלך ועשה commit ל-GitHub.');
+}
+
+// ייבוא קישורים מקובץ JSON
+function handleImportFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const importedLinks = JSON.parse(event.target.result);
+            if (Array.isArray(importedLinks)) {
+                if (confirm(`האם אתה בטוח שברצונך לייבא ${importedLinks.length} קישורים? זה יחליף את הקישורים הקיימים.`)) {
+                    links = importedLinks;
+                    saveLinks();
+                    renderLinks();
+                    alert('הקישורים יובאו בהצלחה!');
+                }
+            } else {
+                alert('קובץ לא תקין. הקובץ צריך להכיל מערך של קישורים.');
+            }
+        } catch (error) {
+            alert('שגיאה בקריאת הקובץ: ' + error.message);
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // איפוס input
+}
+
+// טעינת קישורים מקובץ JSON בפרויקט (אם קיים)
+async function loadLinksFromFile() {
+    try {
+        const response = await fetch('shopping-links.json');
+        if (response.ok) {
+            const fileLinks = await response.json();
+            if (Array.isArray(fileLinks) && fileLinks.length > 0) {
+                // אם יש קישורים ב-localStorage, נשאיר אותם. אחרת נטען מהקובץ
+                if (links.length === 0) {
+                    links = fileLinks;
+                    saveLinks();
+                    renderLinks();
+                }
+            }
+        }
+    } catch (error) {
+        // הקובץ לא קיים או יש שגיאה - זה בסדר, נשתמש ב-localStorage
+        console.log('לא נמצא קובץ shopping-links.json, משתמשים ב-localStorage');
+    }
 }
 
 // הפונקציה deleteLink צריכה להיות גלובלית כדי לעבוד מה-HTML
